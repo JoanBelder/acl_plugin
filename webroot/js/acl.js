@@ -9,17 +9,17 @@ function indicator_hide() {
 /* ARO functions */
 function acl_aro_editor_load() {
 	indicator_show();
-	var id = $('#aro_editor_parentId').attr('value');
+	var id = $('#aro_editor_parentId').val();
 	$.ajax({
 		url: acl_base_url + '/AclAros/load/' + id + '.json',
 		dataType: 'json',
 		success: function(data,textStatus) {
       data = data.data || {};
-			$('#aro_editor_id').attr('value',data.id);
-			$('#aro_editor_originalParentId').attr('value', data.parent_id);
-			$('#aro_editor_alias').attr('value', data.alias);
-			$('#aro_editor_model').attr('value',data.model);
-			$('#aro_editor_foreignKey').attr('value',data.key);
+			$('#aro_editor_id').val(data.id);
+			$('#aro_editor_originalParentId').val( data.parent_id);
+			$('#aro_editor_alias').val( data.alias);
+			$('#aro_editor_model').val(data.model);
+			$('#aro_editor_foreignKey').val(data.key);
 			$('#aro_editor_create').hide();
 			$('#aro_editor_update').show();
 			$('#aro_editor_cancel').show();
@@ -51,33 +51,36 @@ function acl_aro_editor_reload() {
 		}
 	});
 }
+
 function acl_aro_editor_delete() {
 	indicator_show();
-	var id = $('#aro_editor_parentId').attr('value');
+	var id = $('#aro_editor_parentId').val();
 	$.ajax({
 		url: acl_base_url + '/AclAros/delete/' + id + '.json',
 		success: function(data,textStatus) {
-			acl_aro_editor_children($('#aro_editor_originalParentId').attr('value'));
+			acl_aro_editor_children($('#aro_editor_originalParentId').val());
 			acl_aro_editor_cancel();
 			indicator_hide();
 		}
 	});
 }
+
 function acl_aro_editor_cancel() {
-	$('#aro_editor_id,#aro_editor_parentId,#aro_editor_alias,#aro_editor_foreignKey,#aro_editor_model').attr('value','');
+	$('#aro_editor_id,#aro_editor_parentId,#aro_editor_alias,#aro_editor_foreignKey,#aro_editor_model').val('');
 	$('#aro_editor_create').show();
 	$('#aro_editor_update').hide();
 	$('#aro_editor_cancel').hide();
 	$('#aro_editor_delete').hide();
 }
+
 function acl_aro_editor_create() {
 	indicator_show();
-	var parent_id = $('#aro_editor_parentId').attr('value');
-	var alias     = $('#aro_editor_alias').attr('value');
-	var key       = $('#aro_editor_foreignKey').attr('value');
-	var model     = $('#aro_editor_model').attr('value');
+	var parent_id = $('#aro_editor_parentId').val();
+	var alias     = $('#aro_editor_alias').val();
+	var key       = $('#aro_editor_foreignKey').val();
+	var model     = $('#aro_editor_model').val();
 	if (!parent_id) {
-		parent_id = $('#aro_editor_defaultParentId').attr('value');
+		parent_id = $('#aro_editor_defaultParentId').val();
 	}
 	var h = {'data[AclAro][alias]':alias, 'data[AclAro][foreign_key]':key, 'data[AclAro][model]':model, 'data[AclAro][parent_id]':parent_id};
 	$.ajax({
@@ -85,19 +88,20 @@ function acl_aro_editor_create() {
 		data: h,
 		type: 'POST',
 		success: function(data,statusText) {
-			acl_aro_editor_children(parent_id); 
+			acl_aro_editor_children(parent_id);
 			acl_aro_editor_cancel();
 			indicator_hide();
 		}
 	});
 }
+
 function acl_aro_editor_update() {
 	indicator_show();
-	var id        = $('#aro_editor_id').attr('value');
-	var parent_id = $('#aro_editor_parentId').attr('value');
-	var alias     = $('#aro_editor_alias').attr('value');
-	var key       = $('#aro_editor_foreignKey').attr('value');
-	var model     = $('#aro_editor_model').attr('value');
+	var id        = $('#aro_editor_id').val();
+	var parent_id = $('#aro_editor_parentId').val();
+	var alias     = $('#aro_editor_alias').val();
+	var key       = $('#aro_editor_foreignKey').val();
+	var model     = $('#aro_editor_model').val();
 	if (parent_id != id) {
 		var h = {'data[AclAro][id]':id, 'data[AclAro][alias]':alias, 'data[AclAro][foreign_key]':key, 'data[AclAro][model]':model, 'data[AclAro][parent_id]':parent_id};
 	} else {
@@ -108,16 +112,17 @@ function acl_aro_editor_update() {
 		data: h,
 		type: 'POST',
 		success: function(data,statusText) {
-			acl_aro_editor_children($('#aro_editor_parentId').attr('value'));
+			acl_aro_editor_children($('#aro_editor_parentId').val());
 			acl_aro_editor_cancel();
 			indicator_hide();
 		}
-	}) 
+	})
 }
+
 function acl_aro_setup() {
 	// ondblclick="acl_aro_editor_children(this.value)
 	$('#aro_editor_parentId').dblclick(function() {
-		acl_aro_editor_children($(this).attr('value'));
+		acl_aro_editor_children($(this).val());
 	});
 
 	$('#aro_editor_edit').click(acl_aro_editor_load);
@@ -132,23 +137,24 @@ function acl_aro_setup() {
 /* ACO Functions */
 function acl_aco_editor_load() {
 	indicator_show();
-	var id = $('#aco_editor_parentId').attr('value');
+	var id = $('#aco_editor_parentId').val();
 	$.ajax({
 		url: acl_base_url + '/AclAcos/load/' + id + '.json',
 		dataType: 'json',
 		success: function(data,statusText) {
       data = data.data || {};
-			$('#aco_editor_id').attr('value',data.id);
-			$('#aco_editor_originalParentId').attr('value',data.parent_id);
-			$('#aco_editor_alias').attr('value',data.alias);
-			$('#aco_editor_model').attr('value',data.model);
-			$('#aco_editor_foreignKey').attr('value',data.key);
+			$('#aco_editor_id').val(data.id);
+			$('#aco_editor_originalParentId').val(data.parent_id);
+			$('#aco_editor_alias').val(data.alias);
+			$('#aco_editor_model').val(data.model);
+			$('#aco_editor_foreignKey').val(data.key);
 			$('#aco_editor_create').hide();
 			$('#aco_editor_update,#aco_editor_cancel,#aco_editor_delete').show();
 			indicator_hide();
 		}
 	});
 }
+
 function acl_aco_editor_children(id) {
 	indicator_show();
 	$.ajax({
@@ -172,31 +178,34 @@ function acl_aco_editor_reload() {
 		}
 	});
 }
+
 function acl_aco_editor_delete() {
 	indicator_show();
-	var id = $('#aco_editor_parentId').attr('value');
+	var id = $('#aco_editor_parentId').val();
 	$.ajax({
 		url: acl_base_url + '/AclAcos/delete/' + id + '.json',
 		success: function(data,statusText) {
-			acl_aco_editor_children($('#aco_editor_originalParentId').attr('value'));
+			acl_aco_editor_children($('#aco_editor_originalParentId').val());
 			acl_aco_editor_cancel();
 			indicator_hide();
 		}
 	});
 }
+
 function acl_aco_editor_cancel() {
-	$('#aco_editor_id,#aco_editor_parentId,#aco_editor_alias,#aco_editor_foreignKey,#aco_editor_model').attr('value','');
+	$('#aco_editor_id,#aco_editor_parentId,#aco_editor_alias,#aco_editor_foreignKey,#aco_editor_model').val('');
 	$('#aco_editor_create').show();
 	$('#aco_editor_update,#aco_editor_cancel,#aco_editor_delete').hide();
 }
+
 function acl_aco_editor_create() {
 	indicator_show();
-	var parent_id = $('#aco_editor_parentId').attr('value');
-	var alias     = $('#aco_editor_alias').attr('value');
-	var key       = $('#aco_editor_foreignKey').attr('value');
-	var model     = $('#aco_editor_model').attr('value');
+	var parent_id = $('#aco_editor_parentId').val();
+	var alias     = $('#aco_editor_alias').val();
+	var key       = $('#aco_editor_foreignKey').val();
+	var model     = $('#aco_editor_model').val();
 	if (!parent_id) {
-		parent_id = $('#aco_editor_defaultParentId').attr('value');
+		parent_id = $('#aco_editor_defaultParentId').val();
 	}
 	var h = {'data[AclAco][alias]':alias, 'data[AclAco][foreign_key]':key, 'data[AclAco][model]':model, 'data[AclAco][parent_id]':parent_id};
 	$.ajax({
@@ -204,19 +213,20 @@ function acl_aco_editor_create() {
 		data: h,
 		type: 'POST',
 		success: function() {
-			acl_aco_editor_children(parent_id); 
+			acl_aco_editor_children(parent_id);
 			acl_aco_editor_cancel();
 			indicator_hide();
 		}
 	});
 }
+
 function acl_aco_editor_update() {
 	indicator_show();
-	var id        = $('#aco_editor_id').attr('value');
-	var parent_id = $('#aco_editor_parentId').attr('value');
-	var alias     = $('#aco_editor_alias').attr('value');
-	var key       = $('#aco_editor_foreignKey').attr('value');
-	var model     = $('#aco_editor_model').attr('value');
+	var id        = $('#aco_editor_id').val();
+	var parent_id = $('#aco_editor_parentId').val();
+	var alias     = $('#aco_editor_alias').val();
+	var key       = $('#aco_editor_foreignKey').val();
+	var model     = $('#aco_editor_model').val();
 	if (parent_id != id) {
 		var h = {'data[AclAco][id]':id, 'data[AclAco][alias]':alias, 'data[AclAco][foreign_key]':key, 'data[AclAco][model]':model, 'data[AclAco][parent_id]':parent_id};
 	} else {
@@ -227,15 +237,16 @@ function acl_aco_editor_update() {
 		data: h,
 		type: 'POST',
 		success: function() {
-			acl_aco_editor_children($('#aco_editor_parentId').attr('value')); 
+			acl_aco_editor_children($('#aco_editor_parentId').val());
 			acl_aco_editor_cancel();
 			indicator_hide();
 		}
 	});
 }
+
 function acl_aco_setup() {
 	$('#aco_editor_parentId').dblclick(function() {
-		acl_aco_editor_children($(this).attr('value'));
+		acl_aco_editor_children($(this).val());
 	});
 
 	$('#aco_editor_edit').click(acl_aco_editor_load);
@@ -249,7 +260,7 @@ function acl_aco_setup() {
 
 /* Permissions */
 function acl_aco_permission_refresh() {
-	var aco_id = $('#aco_editor_parentId').attr('value');
+	var aco_id = $('#aco_editor_parentId').val();
 	if(aco_id){
 		$.ajax({
 			url: acl_base_url + '/AclPermissions/acos/' + aco_id,
@@ -260,8 +271,9 @@ function acl_aco_permission_refresh() {
 		});
 	}
 }
+
 function acl_aro_permission_refresh() {
-	var aro_id = $('#aro_editor_parentId').attr('value');
+	var aro_id = $('#aro_editor_parentId').val();
 	if(aro_id){
 		$.ajax({
 			url: acl_base_url + '/AclPermissions/aros/' + aro_id,
@@ -272,10 +284,11 @@ function acl_aro_permission_refresh() {
 		});
 	}
 }
+
 /* PERMISSION */
 function acl_permission_link() {
-	var aro_id = $('#aro_editor_parentId').attr('value');
-	var aco_id = $('#aco_editor_parentId').attr('value');
+	var aro_id = $('#aro_editor_parentId').val();
+	var aco_id = $('#aco_editor_parentId').val();
 	var h = {'data[AclAroAco][aro_id]':aro_id, 'data[AclAroAco][aco_id]':aco_id};
 	$.ajax({
 		url: acl_base_url + '/AclPermissions/create.json',
@@ -287,6 +300,7 @@ function acl_permission_link() {
 		}
 	});
 }
+
 function acl_permission_revoke(id) {
 	if (confirm("You sure you want to revoke this ACL?")) {
 		$.ajax({
@@ -312,24 +326,23 @@ function acl_permission_crud_update(el) {
 		success: function(data,statusText) {
 		}
 	});
-}	
+}
 
 function acl_permission_setup() {
 	$('#aro_editor_parentId').click(acl_aro_permission_refresh).dblclick(function(id) {
-	 acl_aro_editor_children($(this).attr('value'));
+	 acl_aro_editor_children($(this).val());
 	});
 	$('#aco_editor_parentId').click(acl_aco_permission_refresh).dblclick(function(id) {
-	 acl_aco_editor_children($(this).attr('value'));
+	 acl_aco_editor_children($(this).val());
 	});
 	$('#acl_link_button').click(acl_permission_link);
-	$('.acl_permission_link').live('click',function() {
+	$('.acl_permission_box').on('click', '.acl_permission_link', function() {
 		var aro_aco_id = $(this).parent().attr('aro_aco');
 		acl_permission_revoke(aro_aco_id);
 	});
-	$('.acl_permission_item input[type=checkbox]').live('change',function() {
+	$('.acl_permission_box').on('change', '.acl_permission_item input[type=checkbox]', function() {
 		acl_permission_crud_update(this);
 	});
 	acl_aro_editor_reload();
 	acl_aco_editor_reload();
 }
-
