@@ -61,8 +61,6 @@ revoke.</p>
     </td>
   </tr>
 </table>
-<script type="text/javascript">
-$(document).ready(function() {
-	acl_permission_setup();
-});
-</script>
+<?php
+	$this->Html->scriptBlock('$(acl_permission_setup);', array('block' => 'script'));
+?>

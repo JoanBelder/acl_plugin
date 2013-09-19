@@ -40,8 +40,6 @@
     </td>
   </tr>
 </table>
-<script type="text/javascript">
-$(document).ready(function() {
-	acl_aro_setup();
-});
-</script>
+<?php
+	$this->Html->scriptBlock('$(acl_aro_setup);', array('block' => 'script'));
+?>

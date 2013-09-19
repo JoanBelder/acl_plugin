@@ -40,9 +40,6 @@
     </td>
   </tr>
 </table>
-<script type="text/javascript">
-$(document).ready(function() {
-	acl_aco_setup();
-});
-</script>
-      
+<?php
+	$this->Html->scriptBlock('$(acl_aco_setup);', array('block' => 'script'));
+?>
